@@ -1,0 +1,68 @@
+@import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
+@import "https://pro.fontawesome.com/releases/v5.15.4/css/all.css";
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.navbar {
+  padding-left: 3%;
+  padding-right: 3%;
+  height: 70px;
+  background-color: black;
+  z-index: 1;
+  width: 100%;
+  top: 0;
+  position: fixed;
+}
+
+.navbar-item, .navbar-link {
+  color: white;
+}
+
+.navbar-item:hover, .navbar-link:hover {
+  background-color: black !important;
+  color: #765f5a !important;
+}
+
+.navbar-link {
+  background-color: black !important;
+}
+
+.navbar-dropdown {
+  top: 65%;
+  border-top: none;
+}
+.navbar-dropdown > .navbar-item:hover {
+  background-color: rgb(19, 19, 19) !important;
+}
+
+.navbar-item img {
+  height: 100%;
+  max-height: unset;
+}
+
+.productContainer{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  grid-gap: 20px;
+}
+
+.product {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #72727259;
+  width: 200px;
+  height: 250px;
+}
+
+.is-165x165 {
+  height: 165px;
+  width: 165px;
+}
+
+.textarea:not([rows]) {
+  max-height: 40em;
+  min-height: 3.5em;
+}
