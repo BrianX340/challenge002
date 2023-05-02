@@ -27,7 +27,13 @@ export default function InputImage(props) {
 
                 </figure>
                 <div className='m-auto is-flex is-align-items-center pt-3 is-justify-content-center'>
-                    <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e)} />
+                    {
+                        props.enableLoad
+                        ?
+                        <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e)} />        
+                        :
+                        <></>                
+                    }
                 </div>
             </div>
         </>

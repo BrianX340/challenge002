@@ -4,6 +4,12 @@ import TextArea from "../form/TextArea"
 import InputNumber from "../form/InputNumber"
 import InputImage from '../form/InputImage'
 import { createProduct } from '../../services/ApiServices'
+import Modal from '../Modal'
+import Header from '../modal/Header'
+import Body from '../modal/Body'
+import DuoField from '../modal/body/DuoField'
+import ErrorMessage from '../modal/body/ErrorMessage'
+import Footer from '../modal/Footer'
 
 export default function CreateProductModal(props) {
     const [name, setName] = useState('')
@@ -23,7 +29,7 @@ export default function CreateProductModal(props) {
         formData.append('image', imageCharged);
 
         let created = await createProduct(formData);
-        if(created.status === 'success'){
+        if (created.status === 'success') {
             props.setShowOkMessage('Producto Creado!')
             props.reload()
             return props.setShow(false)
@@ -33,35 +39,26 @@ export default function CreateProductModal(props) {
 
     return (
         <>
-            <div className="modal is-active">
-                <div className="modal-background"></div>
-                <div className="modal-card">
-                    <header className="modal-card-head">
-                        <p className="modal-card-title">Crear Producto</p>
-                        <button
-                            onClick={() => props.setShow(false)}
-                            className="delete" aria-label="close"></button>
-                    </header>
-                    <section className="modal-card-body">
-                        <InputImage image={imageCharged} setImage={setImageCharged} />
-                        <div className='is-flex is-justify-content-space-between'>
-                            <InputText text={'Nombre'} placeholder={'Nombre'} setValue={setName} />
-                            <InputNumber text={'Precio'} setValue={setPrice} />
-                        </div>
-                        <InputText text={'Barcode / Id'} placeholder={'Barcode / Id'} setValue={setBarcode} />
-                        <TextArea text={'Descripcion'} placeholder={'Descripcion'} setValue={setDescription} />
-                        <p style={{height:10}} className="help is-danger has-text-centered">{errorMessage ? errorMessage : ''}</p>
-                    </section>
-                    <footer className="modal-card-foot">
-                        <button
-                            onClick={processCreate}
-                            className="button is-success">Crear</button>
-                        <button
-                            onClick={() => props.setShow(false)}
-                            className="button">Cancelar</button>
-                    </footer>
-                </div>
-            </div>
+            <Modal setShowModal={props.setShow} title={'Crear producto'} errorMessage={errorMessage}>
+                <Body>
+                    <InputImage enableLoad={true}  image={imageCharged} setImage={setImageCharged} />
+                    <DuoField>
+                        <InputText text={'Nombre'} placeholder={'Nombre'} setValue={setName} />
+                        <InputNumber text={'Precio'} setValue={setPrice} />
+                    </DuoField>
+                    <InputText text={'Barcode / Id'} placeholder={'Barcode / Id'} setValue={setBarcode} />
+                    <TextArea text={'Descripcion'} placeholder={'Descripcion'} setValue={setDescription} />
+                    <ErrorMessage message={errorMessage}/>
+                </Body>
+                <Footer>
+                    <button
+                        onClick={processCreate}
+                        className="button is-success">Crear</button>
+                    <button
+                        onClick={() => props.setShow(false)}
+                        className="button">Cancelar</button>
+                </Footer>
+            </Modal>
         </>
     )
 }

@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { deleteProduct } from '../../services/ApiServices'
 import EditProductModal from '../admin/EditProductModal'
-import {API_URL} from '../../config'
+import { API_URL } from '../../config'
+import ModalProductDetail from './ModalProductDetail'
 
 export default function Product({ product, isAdmin, reload }) {
     const [showOptions, setShowOptions] = useState(false)
+    const [showDetail, setShowDetail] = useState(false)
     const [showDeletoConfirm, setShowDeletoConfirm] = useState(false)
     const [showEditProduct, setShowEditProduct] = useState(false)
     const [showOkMessage, setShowOkMessage] = useState('')
@@ -16,7 +18,20 @@ export default function Product({ product, isAdmin, reload }) {
 
     return (
         <>
-            <div className="product" style={{ position: 'relative' }}>
+            {
+                showDetail
+                ?
+                <>
+                    <ModalProductDetail setShow={setShowDetail} product={product}/>
+                </>
+                :
+                <></>
+            }
+            <div
+                className="product" style={{ position: 'relative'}}>
+                    <div
+                        onClick={setShowDetail}
+                        style={{position:'absolute',top:0,left:0, width:'100%', height:'100%', zIndex:1}}></div>
                 {
                     showOkMessage
                         ?
@@ -88,6 +103,7 @@ export default function Product({ product, isAdmin, reload }) {
                     showOptions
                         ?
                         <div
+                            onClick={()=>{setShowOptions(false)}}
                             style={{
                                 position: 'absolute',
                                 top: 0,
@@ -103,7 +119,7 @@ export default function Product({ product, isAdmin, reload }) {
                                 borderRadius: 15
                             }}>
                             <i
-                                onClick={() => { 
+                                onClick={() => {
                                     setShowEditProduct(true)
                                     setShowOptions(false)
                                 }}

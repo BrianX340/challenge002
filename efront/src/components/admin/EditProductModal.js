@@ -4,14 +4,21 @@ import TextArea from "../form/TextArea"
 import InputNumber from "../form/InputNumber"
 import InputImage from '../form/InputImage'
 import { editProduct } from '../../services/ApiServices'
+import Modal from '../Modal'
+import Header from '../modal/Header'
+import Body from '../modal/Body'
+import DuoField from '../modal/body/DuoField'
+import ErrorMessage from '../modal/body/ErrorMessage'
+import Footer from '../modal/Footer'
+import ModalProduct from '../products/ModalProductDetail'
 
 export default function EditProductModaljs(props) {
-    const [name, setName] = useState(props.product.name)
-    const [barcode, setBarcode] = useState(props.product.barcode)
-    const [description, setDescription] = useState(props.product.description)
-    const [price, setPrice] = useState(props.product.price)
-    const [imageCharged, setImageCharged] = useState(props.product.imgPath);
     const [errorMessage, setShowErrorMessage] = useState('')
+    const [name, setName] = useState('')
+    const [barcode, setBarcode] = useState('')
+    const [description, setDescription] = useState('')
+    const [price, setPrice] = useState('')
+    const [imageCharged, setImageCharged] = useState(props.product.imgPath);
 
     const processSave = async () => {
         const formData = new FormData();
@@ -23,7 +30,7 @@ export default function EditProductModaljs(props) {
         formData.append('image', imageCharged);
 
         let modified = await editProduct(formData, props.product._id);
-        if(modified.status === 'success'){
+        if (modified.status === 'success') {
             props.setShowOkMessage('Producto modificado!')
             props.reload()
             return props.setShow(false)
@@ -33,35 +40,26 @@ export default function EditProductModaljs(props) {
 
     return (
         <>
-            <div className="modal is-active">
-                <div className="modal-background"></div>
-                <div className="modal-card">
-                    <header className="modal-card-head">
-                        <p className="modal-card-title">Modificar Producto</p>
-                        <button
-                            onClick={() => props.setShow(false)}
-                            className="delete" aria-label="close"></button>
-                    </header>
-                    <section className="modal-card-body">
-                        <InputImage image={imageCharged} setImage={setImageCharged} />
-                        <div className='is-flex is-justify-content-space-between'>
-                            <InputText text={'Nombre'} placeholder={'Nombre'} defaultValue={name} setValue={setName} />
-                            <InputNumber text={'Precio'} defaultValue={price} setValue={setPrice} />
-                        </div>
-                        <InputText text={'Barcode / Id'} defaultValue={barcode} placeholder={'Barcode / Id'} setValue={setBarcode} />
-                        <TextArea text={'Descripcion' } defaultValue={description} placeholder={'Descripcion'} setValue={setDescription} />
-                        <p style={{height:10}} className="help is-danger has-text-centered">{errorMessage ? errorMessage : ''}</p>
-                    </section>
-                    <footer className="modal-card-foot">
-                        <button
-                            onClick={processSave}
-                            className="button is-success">Guardar cambios</button>
-                        <button
-                            onClick={() => props.setShow(false)}
-                            className="button">Cancelar</button>
-                    </footer>
-                </div>
-            </div>
+            <Modal setShowModal={props.setShow} title={'Modificar producto'} errorMessage={errorMessage}>
+                <Body>
+                    <InputImage enableLoad={true} image={imageCharged} setImage={setImageCharged} />
+                    <DuoField>
+                        <InputText text={'Nombre'} placeholder={'Nombre'} defaultValue={name} setValue={setName} />
+                        <InputNumber text={'Precio'} defaultValue={price} setValue={setPrice} />
+                    </DuoField>
+                    <InputText text={'Barcode / Id'} defaultValue={barcode} placeholder={'Barcode / Id'} setValue={setBarcode} />
+                    <TextArea text={'Descripcion'} defaultValue={description} placeholder={'Descripcion'} setValue={setDescription} />
+                    <ErrorMessage message={errorMessage} />
+                </Body>
+                <Footer>
+                    <button
+                        onClick={processSave}
+                        className="button is-success">Guardar cambios</button>
+                    <button
+                        onClick={() => props.setShow(false)}
+                        className="button">Cancelar</button>
+                </Footer>
+            </Modal>
         </>
     )
 }
